@@ -1,52 +1,51 @@
-class tarih:
-    aylaraGöreGünler=[31,29,31,30,31,30,31,30,31,31,30,31]
-    aylistesi=["ocak","subat","mart","nisan","mayıs","haziran","temmuz","agustos","eyül","ekim","kasim","aralik"]
-    def __init__(self,gün,ay,yil):
-       self.ay=int()
-       self.gün=int() 
-       self.yil=int()
-       if ay>=1 and ay<=12:
-          self.ay=ay
-       else:
-          self.ay=1
-       if gün>=1 and gün<=self.aylaraGöreGünler[ay-1]:
-          self.gün=gün   
-       else:
-        self.gün=1    
-       if yil>=1900:
-          self.yil=yil
-       else:
-          self.yil=1900
+class bankaSinifi():
+    def __init__(self,isim,soyisim):
+        if(self.isimSoyisimKontrol(isim)==True and self.isimSoyisimKontrol(soyisim)==True):
+            self.isim=isim
+            self.soyisim=soyisim
+            self.bakiye=0
+        else:
+            raise ValueError("Isim veya soyisim sadece karakter icerebilir!")
+    @staticmethod
+    def isimSoyisimKontrol(isimVeyaSoyisim):
+        for karakter in isimVeyaSoyisim:
+            if not karakter.isalpha():
+                return False
+        return True
+    
+    def profilGoruntule(self):
+        print("Hesap Sahibi:{} {}".format(self.isim,self.soyisim))
+        print("Hesap Bakiyesi:{}₺".format(self.bakiye))
+    
+    def paraYatirma(self,yatirilacakParaMiktari):
+        if yatirilacakParaMiktari<=0:
+            print("Para Yatirma Basarisiz!")
+        else:
+            self.bakiye+=yatirilacakParaMiktari
+            print("Yeni Bakiye:{}".format(self.bakiye))
+    
+    def paraCekme(self,cekilecekParaMiktari):
+        if cekilecekParaMiktari>self.bakiye:
+            print("Para Cekme Basarisiz!")
+        else:
+            self.bakiye-=cekilecekParaMiktari
+            print("Yeni Bakiye:{}".format(self.bakiye))
 
-    def günArttir (self)  :
-      if self.gün<self.aylaraGöreGünler[self.ay-1]:
-       self.gün+=1
-      else:
-         self.gün=1
-         if self.ay<12:
-          self.ay+=1  
-         else:
-          self.ay=1
-          self.yil+=1
-
-    def tarihYazdir(self):
-       print("{} {} {}".format(self.gün,self.aylistesi[self.ay-1],self.yil))
-
-
-    def tarihKarsilastir(self,ikinciTarih)   :
-       if self.yil>ikinciTarih.yil or (self.yil==ikinciTarih.yil and self.ay>ikinciTarih.ay) or(self.ay==ikinciTarih.ay and self.gün>ikinciTarih.gün):
-          print("ilk tarih daha büyüktür")                                                                                      
-       elif self.yil ==ikinciTarih.yil and self.ay==ikinciTarih.ay and self.gün==ikinciTarih.gün :
-           print("iki tarih de esittir")   
-       else:
-          print("ikinci tarih daha büyüktür")
-            
-tarih1=tarih(30,7,1999)
-tarih2=tarih(31,7,1999)
-tarih1.tarihYazdir()
-tarih1.günArttir()
-tarih1.tarihYazdir()
-tarih2.tarihYazdir()
-tarih2.günArttir()
-tarih2.tarihYazdir()
-tarih1.tarihKarsilastir(tarih2)
+    def paraGonderme(self,gonderilecekParaMiktari,gonderilecekHesap):
+        if gonderilecekParaMiktari>self.bakiye:
+            print("Para Gonderme Basarisiz!")
+        else:
+            self.bakiye-=gonderilecekParaMiktari
+            gonderilecekHesap.bakiye+=gonderilecekParaMiktari
+            print("Yeni Bakiye:{}".format(self.bakiye))
+            hesap1=bankaSinifi("Ogun","Birinci")
+hesap2=bankaSinifi("Elifnur","Atici")
+hesap1.profilGoruntule()
+hesap2.profilGoruntule()
+hesap1.paraYatirma(200)
+hesap1.profilGoruntule()
+hesap1.paraCekme(100)
+hesap1.profilGoruntule()
+hesap1.paraGonderme(100,hesap2)
+hesap1.profilGoruntule()
+hesap2.profilGoruntule()
